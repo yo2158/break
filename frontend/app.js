@@ -139,6 +139,7 @@ const MODEL_OPTIONS = {
     ],
     'API_OpenRouter': [
         { value: 'openai/gpt-5', label: 'GPT-5' },
+        { value: 'openai/gpt-5-nano', label: 'GPT-5 Nano' },
         { value: 'google/gemini-2.5-pro', label: 'Gemini 2.5 Pro' },
         { value: 'deepseek/deepseek-chat-v3.1', label: 'DeepSeek V3.1' },
         { value: 'anthropic/claude-sonnet-4.5', label: 'Claude Sonnet 4.5' },
