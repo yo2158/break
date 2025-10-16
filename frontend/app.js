@@ -133,7 +133,7 @@ const ENGINE_OPTIONS = [
 
 const MODEL_OPTIONS = {
     'API_Gemini': [
-        { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash (Default)' },
+        { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
         { value: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite' },
         { value: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro' }
     ],
@@ -1623,13 +1623,13 @@ async function copyDebateToClipboard() {
     const breakshotStance = data.break_shot.ai === 'AI_A' ? data.axis_left : data.axis_right;
     const breakshotDisplayName = data.break_shot.ai === 'AI_A' ? aiADisplayName : aiBDisplayName;
 
-    // Character limits (total target: ~1075 chars, will be truncated to 1000 if exceeded)
+    // Character limits (will be truncated to 1000 if exceeded)
     const LIMITS = {
         topic: 45,
-        axisLeft: 15,
-        axisRight: 15,
-        aiADisplayName: 15,
-        aiBDisplayName: 15,
+        axisLeft: 25,
+        axisRight: 25,
+        aiADisplayName: 25,
+        aiBDisplayName: 25,
         winnerStance: 15,
         winnerDisplayName: 15,
         round1A: 150,
@@ -1637,9 +1637,9 @@ async function copyDebateToClipboard() {
         round2A: 150,
         round2B: 150,
         breakshotStance: 15,
-        breakshotDisplayName: 15,
-        breakshotCategory: 10,
-        breakshotQuote: 50,
+        breakshotDisplayName: 25,
+        breakshotCategory: 25,
+        breakshotQuote: 120,
         reasoning: 160
     };
 
