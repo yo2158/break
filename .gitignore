@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+data/*.db
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Claude Code backups
+.claude.backup-*/
+
+# Development and design documents (not for public release)
+.claude/
+concept/
+tests/
+AGENTS.md
+CLAUDE.md
+
+# MCP and Memory Keeper (personal environment)
+.mcp.json
+.memory-keeper/
+
+# VSCode workspace
+*.code-workspace
+
+# User config (may contain API keys)
+config/user_config.json
+
+# Project temporary files
+trash/
+_tmp.*
+*.backup
+*_backup.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config (keep template, ignore local overrides)
+config/user_config.local.json

@@ -1,0 +1,11 @@
+# BREAK - Python依存パッケージ
+
+# Webフレームワーク
+Flask>=2.0.0
+
+# AI API
+google-generativeai>=0.8.0
+requests>=2.31.0
+
+# 非同期処理
+aiohttp>=3.9.0

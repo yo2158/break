@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BREAK - AI Debate Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,700;1,400&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Fixed Topic Header -->
+    <div class="topic-header" id="topicHeader">
+        <div class="topic-header-content">
+            <span class="topic-label">TOPIC:</span>
+            <span class="topic-text" id="topicHeaderText"></span>
+        </div>
+    </div>
+
+    <!-- Axis Cut-in Overlay -->
+    <div class="axis-cutin" id="axisCutin">
+        <div>
+            <div class="axis-announcement">DEBATE AXIS DETERMINED!</div>
+            <div class="axis-display" id="axisDisplay">
+                <span class="axis-label" id="axisLeft">効率重視[Gemini API]</span>
+                <span class="vs-icon">⚔️</span>
+                <span class="axis-label" id="axisRight">公平重視[OpenRouter]</span>
+            </div>
+            <div class="axis-reasoning" id="axisReasoning">
+                <!-- Reasoning for axis selection will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Objection Cut-in Overlay -->
+    <div class="objection-cutin" id="objectionCutin">
+        <div class="objection-text">OBJECTION!</div>
+    </div>
+
+    <!-- Round Cut-in Overlay -->
+    <div class="round-cutin" id="roundCutin">
+        <div class="round-cutin-title" id="roundCutinTitle">ROUND 1</div>
+        <div class="round-cutin-subtitle" id="roundCutinSubtitle">Opening Arguments</div>
+    </div>
+
+    <!-- Break Shot Cut-in Overlay -->
+    <div class="breakshot-cutin" id="breakshotCutin">
+        <div class="breakshot-title">BREAK SHOT!</div>
+        <div class="breakshot-content">
+            <div class="breakshot-eval" id="breakshotEval">AI_A / ATTACK : 9/10</div>
+            <div class="breakshot-quote" id="breakshotQuote">
+                「恐怖を煽る論法は公正な議論を阻害する詭弁に過ぎない。」
+            </div>
+        </div>
+    </div>
+
+    <!-- Judgment Cut-in Overlay -->
+    <div class="judgment-cutin" id="judgmentCutin">
+        <div class="judgment-cutin-text">FINAL JUDGMENT</div>
+    </div>
+
+    <!-- Winner Cut-in Overlay -->
+    <div class="winner-cutin" id="winnerCutin">
+        <div class="winner-cutin-text" id="winnerCutinText">WINNER......</div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-indicator" id="loadingIndicator">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Preparing counter arguments...</div>
+    </div>
+
+    <!-- Stop Button (Left Bottom, shown during debate) -->
+    <div class="stop-button" id="stopButton" title="Stop Debate (ESC)">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="12" height="12"/>
+        </svg>
+        <span>STOP</span>
+    </div>
+
+    <!-- Fixed Action Buttons -->
+    <div class="fixed-actions">
+        <div class="fixed-action-button" id="fullReportButton" title="Copy Full Report (Markdown)">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+            </svg>
+        </div>
+        <div class="fixed-action-button" id="copyButton" title="Copy Summary">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+        </div>
+        <div class="fixed-action-button" id="backToTop" title="Back to Top">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 14l5-5 5 5z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Top Control Buttons -->
+    <div class="top-controls">
+        <button class="control-button secondary" id="historyButton">HISTORY</button>
+        <button class="control-button secondary" id="configButton">CONFIG</button>
+        <button class="control-button secondary" id="apiButton">API SETUP</button>
+        <button class="control-button secondary" id="testButton">TEST</button>
+        <div class="font-size-control">
+            <span class="font-size-label">TEXT SIZE:</span>
+            <input type="range" class="font-size-slider" id="fontSizeSlider" min="1" max="2" step="0.1" value="1.4">
+        </div>
+        <button class="sound-toggle" id="soundToggle" title="Toggle Sound">
+            <span id="soundIcon">🔊</span>
+        </button>
+    </div>
+
+    <!-- Test Modal -->
+    <div class="history-modal" id="testModal">
+        <div class="modal-content-narrow">
+            <div class="history-header">
+                <h2 class="history-title">CONNECTION TEST</h2>
+                <span class="history-close" id="testClose">✕</span>
+            </div>
+
+            <div class="config-section">
+                <div class="config-note" style="margin-bottom: 20px; color: #ffaa00;">
+                    ⚠️ This test sends actual API requests. Costs may apply depending on your configuration.
+                </div>
+            </div>
+
+            <div class="config-section">
+                <button class="config-save" id="runTestButton">RUN CONNECTION TEST</button>
+            </div>
+
+            <div class="config-section" id="testResults" style="display: none;">
+                <label class="config-label">TEST RESULTS</label>
+
+                <div style="margin-top: 15px;">
+                    <div style="font-weight: bold; color: var(--secondary-color); margin-bottom: 10px;">AI_A</div>
+                    <div id="testResultAiA" style="background: rgba(0,0,0,0.5); border: 2px solid #666; border-radius: 5px; padding: 15px; margin-bottom: 15px;">
+                        <div style="font-family: monospace; font-size: 0.85rem; color: #d0d0d0;">Testing...</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <div style="font-weight: bold; color: var(--secondary-color); margin-bottom: 10px;">AI_B</div>
+                    <div id="testResultAiB" style="background: rgba(0,0,0,0.5); border: 2px solid #666; border-radius: 5px; padding: 15px; margin-bottom: 15px;">
+                        <div style="font-family: monospace; font-size: 0.85rem; color: #d0d0d0;">Testing...</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <div style="font-weight: bold; color: var(--secondary-color); margin-bottom: 10px;">JUDGE</div>
+                    <div id="testResultJudge" style="background: rgba(0,0,0,0.5); border: 2px solid #666; border-radius: 5px; padding: 15px;">
+                        <div style="font-family: monospace; font-size: 0.85rem; color: #d0d0d0;">Testing...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Config Modal -->
+    <div class="history-modal" id="configModal">
+        <div class="modal-content-narrow">
+            <div class="history-header">
+                <h2 class="history-title">NODE CONFIGURATION</h2>
+                <span class="history-close" id="configClose">✕</span>
+            </div>
+
+            <!-- AI_A Configuration -->
+            <div class="config-section">
+                <div class="config-row">
+                    <label class="config-label">AI_A ENGINE</label>
+                    <select class="config-select" id="aiAEngine">
+                        <option value="API_Gemini">Gemini API</option>
+                        <option value="API_OpenRouter">OpenRouter</option>
+                        <option value="API_Ollama">Ollama (Local)</option>
+                        <option value="ChatGPT">ChatGPT (Codex CLI)</option>
+                        <option value="Gemini">Gemini (GEMINI CLI)</option>
+                        <option value="Claude">Claude (Claude Code)</option>
+                    </select>
+                </div>
+                <div class="config-row" id="aiAModelSection">
+                    <label class="config-label">AI_A MODEL</label>
+                    <select class="config-select" id="aiAModel">
+                        <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+                        <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
+                        <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="height: 20px;"></div>
+
+            <!-- AI_B Configuration -->
+            <div class="config-section">
+                <div class="config-row">
+                    <label class="config-label">AI_B ENGINE</label>
+                    <select class="config-select" id="aiBEngine">
+                        <option value="API_Gemini">Gemini API</option>
+                        <option value="API_OpenRouter">OpenRouter</option>
+                        <option value="API_Ollama">Ollama (Local)</option>
+                        <option value="ChatGPT">ChatGPT (Codex CLI)</option>
+                        <option value="Gemini">Gemini (GEMINI CLI)</option>
+                        <option value="Claude">Claude (Claude Code)</option>
+                    </select>
+                </div>
+                <div class="config-row" id="aiBModelSection">
+                    <label class="config-label">AI_B MODEL</label>
+                    <select class="config-select" id="aiBModel">
+                        <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+                        <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
+                        <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="height: 20px;"></div>
+
+            <!-- Judge Configuration -->
+            <div class="config-section">
+                <div class="config-row">
+                    <label class="config-label">JUDGE ENGINE</label>
+                    <select class="config-select" id="judgeEngine">
+                        <option value="API_Gemini">Gemini API</option>
+                        <option value="API_OpenRouter">OpenRouter</option>
+                        <option value="API_Ollama">Ollama (Local)</option>
+                        <option value="ChatGPT">ChatGPT (Codex CLI)</option>
+                        <option value="Gemini">Gemini (GEMINI CLI)</option>
+                        <option value="Claude">Claude (Claude Code)</option>
+                    </select>
+                </div>
+                <div class="config-row" id="judgeModelSection">
+                    <label class="config-label">JUDGE MODEL</label>
+                    <select class="config-select" id="judgeModel">
+                        <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+                        <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
+                        <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="config-save" id="saveConfigButton">SAVE CONFIG</button>
+        </div>
+    </div>
+
+    <!-- API Setup Modal -->
+    <div class="history-modal" id="apiModal">
+        <div class="modal-content-narrow">
+            <div class="history-header">
+                <h2 class="history-title">API CONFIGURATION</h2>
+                <span class="history-close" id="apiClose">✕</span>
+            </div>
+
+            <div class="config-section">
+                <div class="config-row">
+                    <label class="config-label">GEMINI API KEY</label>
+                    <input type="password" class="config-input" id="geminiApiKey" placeholder="AIza..." value="">
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-row">
+                    <label class="config-label">OPENROUTER KEY</label>
+                    <input type="password" class="config-input" id="openrouterApiKey" placeholder="sk-or-v1-..." value="">
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-row">
+                    <label class="config-label">OLLAMA URL</label>
+                    <input type="text" class="config-input" id="ollamaUrl" placeholder="http://localhost:11434" value="http://localhost:11434">
+                </div>
+            </div>
+
+            <button class="config-save" id="saveApiButton">SAVE API SETTINGS</button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="history-modal" id="historyModal">
+        <div class="history-content">
+            <div class="history-list" id="historyList">
+                <div class="history-header">
+                    <h2 class="history-title">DEBATE HISTORY</h2>
+                    <span class="history-close" id="historyClose">✕</span>
+                </div>
+                <div class="history-items" id="historyListItems">
+                    <!-- History items will be dynamically inserted here -->
+                </div>
+                <div class="history-pagination">
+                    <div class="history-pagination-info" id="historyPaginationInfo">Showing 0 of 0 debates</div>
+                </div>
+            </div>
+            <div class="history-detail" id="historyDetail">
+                <div class="history-detail-back" id="historyBack">← Back to list</div>
+                <div class="history-header">
+                    <h2 class="history-title">DEBATE DETAIL</h2>
+                    <span class="history-close" id="historyDetailClose">✕</span>
+                </div>
+                <div class="history-detail-section">
+                    <div class="history-detail-title">TOPIC</div>
+                    <div class="history-detail-text" id="historyDetailTopic"></div>
+                </div>
+                <div class="history-detail-section">
+                    <div class="history-detail-title">AXIS</div>
+                    <div class="history-detail-text" id="historyDetailAxis"></div>
+                </div>
+                <div class="history-detail-section">
+                    <div class="history-detail-title">DEBATE ROUNDS</div>
+                    <div class="round-tabs">
+                        <button class="round-tab" id="round1Tab">ROUND 1</button>
+                        <button class="round-tab" id="round2Tab">ROUND 2</button>
+                    </div>
+                    <div class="round-content" id="historyDetailRound1">
+                        <!-- Round 1 content will be dynamically inserted -->
+                    </div>
+                    <div class="round-content" id="historyDetailRound2">
+                        <!-- Round 2 content will be dynamically inserted -->
+                    </div>
+                </div>
+                <div class="history-detail-section">
+                    <div class="history-detail-title">FINAL RESULT</div>
+                    <div class="history-detail-text" id="historyDetailResult"></div>
+                </div>
+                <div class="history-detail-section">
+                    <div class="history-detail-title">BREAK SHOT</div>
+                    <div class="history-detail-text" id="historyDetailBreakShot"></div>
+                </div>
+                <div class="history-detail-section">
+                    <div class="history-detail-title">REASONING</div>
+                    <div class="history-detail-text" id="historyDetailReasoning"></div>
+                </div>
+                <div class="history-detail-section">
+                    <div class="history-detail-title">SYNTHESIS</div>
+                    <div class="history-detail-text" id="historyDetailSynthesis"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section id="hero" class="page-section visible">
+            <h1 class="main-title">BREAK</h1>
+            <p class="subtitle">Binary Reasoning Evaluation & Argument Knockdown</p>
+            <p class="subtitle-sub">AI Debate Observation Platform</p>
+            <textarea class="topic-input" id="topicInput" placeholder="Enter a topic for AI debate..."></textarea>
+            <button class="start-button" id="startButton">START DEBATE</button>
+        </section>
+
+        <!-- Analyzing Section -->
+        <section id="analyzing" class="page-section">
+            <div class="analyzing-text" id="analyzingText">Analyzing debate axis...</div>
+            <div class="loading-gear" id="loadingGear"></div>
+        </section>
+
+        <!-- Round 1 -->
+        <section id="round1" class="page-section">
+            <div class="content">
+                <h2 class="round-title">ROUND 1</h2>
+                <p class="round-subtitle">Opening Arguments</p>
+                <div class="debate-grid">
+                    <div class="debate-card" id="round1CardA">
+                        <div class="card-header">
+                            <span class="ai-name" id="round1NameA">AI_A [効率重視]</span>
+                            <div class="confidence-badge valid" id="round1BadgeA">
+                                <span class="icon">💎</span>
+                                <span>VALID</span>
+                            </div>
+                        </div>
+                        <div class="argument-text" id="round1ArgumentA">
+                            <!-- Round 1 AI_A content will be dynamically inserted -->
+                        </div>
+                    </div>
+                    <div class="debate-card" id="round1CardB">
+                        <div class="card-header">
+                            <span class="ai-name" id="round1NameB">AI_B [公平重視]</span>
+                            <div class="confidence-badge unstable" id="round1BadgeB">
+                                <span class="icon">⚠️</span>
+                                <span>UNSTABLE</span>
+                            </div>
+                        </div>
+                        <div class="argument-text" id="round1ArgumentB">
+                            <!-- Round 1 AI_B content will be dynamically inserted -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Round 2 -->
+        <section id="round2" class="page-section">
+            <div class="content">
+                <h2 class="round-title">ROUND 2</h2>
+                <p class="round-subtitle">Counter Arguments</p>
+                <div class="debate-grid">
+                    <div class="debate-card" id="round2CardA">
+                        <div class="card-header">
+                            <span class="ai-name" id="round2NameA">AI_A [効率重視]</span>
+                            <div class="confidence-badge valid" id="round2BadgeA">
+                                <span class="icon">💎</span>
+                                <span>VALID</span>
+                            </div>
+                        </div>
+                        <div class="argument-text" id="round2ArgumentA">
+                            <!-- Round 2 AI_A content will be dynamically inserted -->
+                        </div>
+                    </div>
+                    <div class="debate-card" id="round2CardB">
+                        <div class="card-header">
+                            <span class="ai-name" id="round2NameB">AI_B [公平重視]</span>
+                            <div class="confidence-badge unstable" id="round2BadgeB">
+                                <span class="icon">⚠️</span>
+                                <span>UNSTABLE</span>
+                            </div>
+                        </div>
+                        <div class="argument-text" id="round2ArgumentB">
+                            <!-- Round 2 AI_B content will be dynamically inserted -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Judgment -->
+        <section id="judgment" class="page-section">
+            <div class="content">
+                <h2 class="judgment-announcement">FINAL JUDGMENT</h2>
+                <div class="scoreboard-container">
+                    <table class="score-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>LOGIC</th>
+                                <th>ATTACK</th>
+                                <th>CONSTRUCT</th>
+                                <th>TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="score-category" id="scoreLabelA">AI_A [効率重視]</td>
+                                <td class="score-value" id="scoreALogic" data-delay="0">8/10</td>
+                                <td class="score-value" id="scoreAAttack" data-delay="1">9/10</td>
+                                <td class="score-value" id="scoreAConstruct" data-delay="2">8/10</td>
+                                <td class="score-value" id="scoreATotal" data-delay="3">25/30</td>
+                            </tr>
+                            <tr>
+                                <td class="score-category" id="scoreLabelB">AI_B [公平重視]</td>
+                                <td class="score-value" id="scoreBLogic" data-delay="4">9/10</td>
+                                <td class="score-value" id="scoreBAttack" data-delay="5">8/10</td>
+                                <td class="score-value" id="scoreBConstruct" data-delay="6">7/10</td>
+                                <td class="score-value" id="scoreBTotal" data-delay="7">24/30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="breakshot-section" id="breakshotSection">
+                        <div class="breakshot-label">BREAK SHOT!</div>
+                        <div class="decisive-moment">
+                            <p class="decisive-title" id="breakshotTitle">AI_A / ATTACK : 9/10</p>
+                            <blockquote class="decisive-quote" id="breakshotQuoteText">
+                                「恐怖を煽る論法は公正な議論を阻害する詭弁に過ぎない。」
+                            </blockquote>
+                        </div>
+                    </div>
+                    <div class="winner-announcement" id="winnerAnnouncement">WINNER: AI_A (+1)</div>
+                    <div class="synthesis-section">
+                        <h3 class="synthesis-title">REASONING</h3>
+                        <p class="synthesis-text" id="reasoningText">
+                            <!-- Reasoning content will be dynamically inserted -->
+                        </p>
+                    </div>
+                    <div class="synthesis-section">
+                        <h3 class="synthesis-title">SYNTHESIS</h3>
+                        <p class="synthesis-text" id="synthesisText">
+                            <!-- Synthesis content will be dynamically inserted -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

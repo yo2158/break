@@ -1,0 +1,25 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "name": "AI_A",
+      "engine": "API_Gemini",
+      "model": "gemini-2.5-flash",
+      "persona_id": "neutral_ai"
+    },
+    {
+      "id": 2,
+      "name": "AI_B",
+      "engine": "API_Gemini",
+      "model": "gemini-2.5-flash",
+      "persona_id": "neutral_ai"
+    },
+    {
+      "id": 3,
+      "name": "JUDGE",
+      "engine": "API_Gemini",
+      "model": "gemini-2.5-flash",
+      "persona_id": "neutral_ai"
+    }
+  ]
+}
