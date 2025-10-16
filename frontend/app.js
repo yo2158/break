@@ -142,6 +142,7 @@ const MODEL_OPTIONS = {
         { value: 'google/gemini-2.5-pro', label: 'Gemini 2.5 Pro' },
         { value: 'deepseek/deepseek-chat-v3.1', label: 'DeepSeek V3.1' },
         { value: 'anthropic/claude-sonnet-4.5', label: 'Claude Sonnet 4.5' },
+        { value: 'anthropic/claude-haiku-4.5', label: 'Claude Haiku 4.5' },
         { value: 'x-ai/grok-code-fast-1', label: 'Grok Code Fast' },
         { value: 'openai/gpt-oss-20b:free', label: 'GPT-OSS 20B (Free)' },
         { value: 'google/gemma-3-27b-it:free', label: 'Gemma 3 27B (Free)' }
