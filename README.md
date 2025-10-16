@@ -6,6 +6,12 @@
 ![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-orange.svg)
 
+## 🎬 デモ
+
+![BREAK Demo](docs/demo.gif)
+
+2つのAIが対立軸を定めて議論し、Judge AIが勝敗を判定します。
+
 ---
 
 ## 📖 何ができるか
