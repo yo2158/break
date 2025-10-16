@@ -229,7 +229,7 @@ break/
 │   └── sound/            # 効果音（各フェーズ用）
 │
 ├── config/               # 設定ファイル
-│   └── user_config.example.json  # AI設定テンプレート
+│   └── user_config.json.default  # AI設定デフォルト
 │
 ├── .env                  # 環境変数設定（.gitignoreで除外）
 ├── .gitignore            # Git除外設定
