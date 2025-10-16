@@ -647,6 +647,45 @@ def get_env():
         return jsonify({"error": "Failed to load environment variables"}), 500
 
 
+@app.route('/api/env', methods=['POST'])
+def save_env():
+    """
+    Save environment variables to .env file.
+
+    Request body:
+        {
+            "GEMINI_API_KEY": str (optional),
+            "OPENROUTER_API_KEY": str (optional),
+            "OLLAMA_URL": str (optional)
+        }
+
+    Returns:
+        JSON: {"success": true}
+    """
+    try:
+        data = request.get_json()
+
+        # Get current env vars
+        env_vars = config_manager.load_env()
+
+        # Update with new values (only if provided)
+        if "GEMINI_API_KEY" in data:
+            env_vars["GEMINI_API_KEY"] = data["GEMINI_API_KEY"]
+        if "OPENROUTER_API_KEY" in data:
+            env_vars["OPENROUTER_API_KEY"] = data["OPENROUTER_API_KEY"]
+        if "OLLAMA_URL" in data:
+            env_vars["OLLAMA_URL"] = data["OLLAMA_URL"]
+
+        # Save to .env file
+        config_manager.save_env(env_vars)
+
+        return jsonify({"success": True}), 200
+
+    except Exception as e:
+        logger.error(f"Failed to save env: {e}", exc_info=True)
+        return jsonify({"error": "Failed to save environment variables"}), 500
+
+
 @app.route('/api/test-engine', methods=['POST'])
 def test_single_engine():
     """
