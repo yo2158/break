@@ -2405,24 +2405,44 @@ apiModal.addEventListener('click', (e) => {
         apiModal.classList.remove('show');
     }
 });
-document.getElementById('saveApiButton').addEventListener('click', () => {
+document.getElementById('saveApiButton').addEventListener('click', async () => {
     // Get input values
     const geminiInput = document.getElementById('geminiApiKey');
     const openrouterInput = document.getElementById('openrouterApiKey');
     const ollamaInput = document.getElementById('ollamaUrl');
 
-    // Check if masked keys were not changed
-    const geminiKey = (geminiInput.dataset.hasKey === 'true' && geminiInput.value === '●●●●●●●●')
-        ? null  // Don't update if unchanged
-        : geminiInput.value;
+    // Build request body (only include changed values)
+    const requestBody = {};
 
-    const openrouterKey = (openrouterInput.dataset.hasKey === 'true' && openrouterInput.value === '●●●●●●●●')
-        ? null  // Don't update if unchanged
-        : openrouterInput.value;
+    // Check if masked keys were changed
+    if (!(geminiInput.dataset.hasKey === 'true' && geminiInput.value === '●●●●●●●●')) {
+        requestBody.GEMINI_API_KEY = geminiInput.value;
+    }
 
-    // Show info message (actual saving requires backend API endpoint /api/env POST)
-    showToast('API settings are managed via .env file. Please edit .env manually.', 'info');
-    apiModal.classList.remove('show');
+    if (!(openrouterInput.dataset.hasKey === 'true' && openrouterInput.value === '●●●●●●●●')) {
+        requestBody.OPENROUTER_API_KEY = openrouterInput.value;
+    }
+
+    // Always include Ollama URL
+    requestBody.OLLAMA_URL = ollamaInput.value;
+
+    try {
+        const response = await fetch('/api/env', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save API settings');
+        }
+
+        showToast('API settings saved successfully', 'success');
+        apiModal.classList.remove('show');
+    } catch (error) {
+        console.error('Failed to save API settings:', error);
+        showToast('Failed to save API settings', 'error');
+    }
 });
 
 // History modal (Task 30a, 31)
