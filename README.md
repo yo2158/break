@@ -217,22 +217,22 @@ BREAKでは、API設定画面から入力されたAPIキーを、ローカル環
 
 ```
 break/
-├── backend/              # バックエンド（Flask）
-│   ├── app.py            # Flaskアプリケーション（SSE対応）
-│   ├── debate_engine.py  # 議論エンジン（4フェーズ実行）
+├── backend/              # バックエンド
+│   ├── app.py            # Flaskアプリケーション
+│   ├── debate_engine.py  # 議論エンジン
 │   ├── prompt_builder.py # プロンプト生成
-│   ├── axis_patterns.py  # 21対立軸定義
-│   ├── db_manager.py     # データベース操作（SQLite）
-│   ├── config_manager.py # 設定管理（MAGIN再利用）
-│   ├── ai_factory.py     # 統合AIインターフェース（MAGIN再利用）
+│   ├── axis_patterns.py  # 対立軸定義
+│   ├── db_manager.py     # データベース操作
+│   ├── config_manager.py # 設定管理
+│   ├── ai_factory.py     # 統合AIインターフェース
 │   └── data/             # データベース
-│       └── debates.db    # 議論履歴（SQLite）
+│       └── debates.db    # 議論履歴
 │
 ├── frontend/             # フロントエンド
-│   ├── index.html        # メインUI（サイバーパンクデザイン）
-│   ├── app.js            # JavaScript（SSEクライアント、履歴管理）
-│   ├── styles.css        # スタイル（Orbitron + Roboto Condensed）
-│   └── sound/            # 効果音（各フェーズ用）
+│   ├── index.html        # メインUI
+│   ├── app.js            # JavaScript
+│   ├── styles.css        # スタイル
+│   └── sound/            # 効果音
 │
 ├── config/               # 設定ファイル
 │   └── user_config.json.default  # AI設定デフォルト
