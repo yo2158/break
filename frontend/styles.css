@@ -65,7 +65,7 @@
             white-space: nowrap;
         }
         .topic-text {
-            font-size: 1.1rem;
+            font-size: calc(var(--argument-font-size, 1.4rem) * 0.79);
             color: var(--text-color);
             flex: 1;
         }
